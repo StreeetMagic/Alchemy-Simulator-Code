@@ -1,0 +1,43 @@
+﻿using Code.Gameplay.Features.Flasks.Services;
+using Entitas;
+
+namespace Code.Gameplay.Features.Flasks.Systems
+{
+  public class MoveMixingFlaskOnShakingStateExit : IExecuteSystem
+  {
+    private readonly IGroup<GameEntity> _states;
+    private readonly IGroup<GameEntity> _flasks;
+    private readonly IGroup<GameEntity> _stationaryPoints;
+    private readonly FlaskMovingService _flaskMovingService;
+
+    public MoveMixingFlaskOnShakingStateExit(GameContext game, FlaskMovingService flaskMovingService)
+    {
+      _flaskMovingService = flaskMovingService;
+      _states = game.GetGroup(GameMatcher
+        .AllOf(
+          GameMatcher.FromAlchemyFlaskShakingStateTransitionFlag));
+
+      _flasks = game.GetGroup(GameMatcher
+        .AllOf(
+          GameMatcher.MixingFlask,
+          GameMatcher.Transform
+        ));
+
+      _stationaryPoints = game.GetGroup(GameMatcher
+        .AllOf(
+          GameMatcher.MixingFlaskStationaryPoint,
+          GameMatcher.WorldPosition
+        ));
+    }
+
+    public void Execute()
+    {
+      foreach (GameEntity unused in _states)
+      foreach (GameEntity flask in _flasks)
+      foreach (GameEntity point in _stationaryPoints)
+      {
+        _flaskMovingService.Move(flask.Transform, point.WorldPosition);
+      }
+    }
+  }
+}
