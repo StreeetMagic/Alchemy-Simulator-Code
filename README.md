@@ -1,3 +1,5 @@
+
+
 Проект на ECS Entitas в начальной стадии.
 Симулятор алхимика.
 
@@ -130,3 +132,5 @@
   }
   ```
 
+
+https://www.youtube.com/watch?v=01QSn-BVQjs
